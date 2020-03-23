@@ -28,7 +28,8 @@ class ReviewController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param  \Illuminate\Http\Request  $request
+     * @param ReviewRequest $request
+     * @param Product $product
      * @return \Illuminate\Http\Response
      */
     public function store(ReviewRequest $request, Product $product)
@@ -42,8 +43,8 @@ class ReviewController extends Controller
 
     /**
      * Display the specified resource.
-     * @param  \App\Model\Review  $review
-     * @return \Illuminate\Http\Response
+     * @param Review $review
+     * @return void
      */
     public function show(Review $review)
     {
@@ -52,8 +53,8 @@ class ReviewController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param  \App\Model\Review  $review
-     * @return \Illuminate\Http\Response
+     * @param Review $review
+     * @return void
      */
     public function edit(Review $review)
     {
@@ -62,22 +63,29 @@ class ReviewController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Review  $review
+     * @param Request $request
+     * @param Product $product
+     * @param Review $review
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Review $review)
+    public function update(Request $request, Product $product, Review $review)
     {
-        //
+        $review->update($request->all());
+        return response([
+            'data' => new ReviewResource($review)
+        ], Response::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param  \App\Model\Review  $review
+     * @param Product $product
+     * @param Review $review
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(Review $review)
+    public function destroy(Product $product, Review $review)
     {
-        //
+        $review->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
